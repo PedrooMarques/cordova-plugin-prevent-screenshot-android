@@ -11,10 +11,10 @@ import java.io.File;
 import java.lang.System;
 import java.lang.Throwable;
 
-
-
 public abstract class ScreenShotContentObserver extends ContentObserver {
-//Got from https://stackoverflow.com/questions/31360296/listen-for-screenshot-action-in-android it shows how to listen for screenshot event
+    // Got from
+    // https://stackoverflow.com/questions/31360296/listen-for-screenshot-action-in-android
+    // it shows how to listen for screenshot event
 
     private Context context;
     private boolean isFromEdit = false;
@@ -39,26 +39,28 @@ public abstract class ScreenShotContentObserver extends ContentObserver {
     public void onChange(boolean selfChange, Uri uri) {
         Cursor cursor = null;
         try {
-            cursor = context.getContentResolver().query(uri, new String[]{
-                    MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.DATA
-            }, null, null, null);
-            if (cursor != null && cursor.moveToLast()) {
-                int displayNameColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
-                int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                String fileName = cursor.getString(displayNameColumnIndex);
-                String path = cursor.getString(dataColumnIndex);
-                if (new File(path).lastModified() >= System.currentTimeMillis() - 10000) {
-                    if (isScreenshot(path) && !isFromEdit && !(previousPath != null && previousPath.equals(path))) {
-                        onScreenShot(path, fileName);
-                    }
-                    previousPath = path;
-                    isFromEdit = false;
-                } else {
-                    cursor.close();
-                    return;
-                }
-            }
+            // cursor = context.getContentResolver().query(uri, new String[]{
+            // MediaStore.Images.Media.DISPLAY_NAME,
+            // MediaStore.Images.Media.DATA
+            // }, null, null, null);
+            // if (cursor != null && cursor.moveToLast()) {
+            // int displayNameColumnIndex =
+            // cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+            // int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            // String fileName = cursor.getString(displayNameColumnIndex);
+            // String path = cursor.getString(dataColumnIndex);
+            // if (new File(path).lastModified() >= System.currentTimeMillis() - 10000) {
+            // if (isScreenshot(path) && !isFromEdit && !(previousPath != null &&
+            // previousPath.equals(path))) {
+            // onScreenShot(path, fileName);
+            // }
+            // previousPath = path;
+            // isFromEdit = false;
+            // } else {
+            // cursor.close();
+            // return;
+            // }
+            // }
         } catch (Throwable t) {
             isFromEdit = true;
         } finally {
